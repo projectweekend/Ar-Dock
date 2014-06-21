@@ -1,7 +1,9 @@
 import os
 import time
-import serial
-import thread
+from serial import Serial
+from threading import Thread
+from utils.http import json_post
+from utils.parse import parse_sensor_data
 
 
 SEND_FREQ = os.getenv('STARBUG_SEND_FREQ', 15)
@@ -13,14 +15,17 @@ if CONNECTION_TYPE == 'gpio':
     # setup GPIO serial
     pass
 else:
-    SERIAL = serial.Serial('/dev/ttyUSB0', DATA_RATE)
+    SERIAL = Serial('/dev/ttyUSB0', DATA_RATE)
 time.sleep(2)
 
 
 def main():
     while True:
-        data = SERIAL.readline()
-        print(data)
+        # convert raw serial string to dictionary
+        sensor_data = parse_sensor_data(SERIAL.readline())
+        # post data to server in another thread
+        Thread(target=json_post, args=(SEND_URL, sensor_data)).start()
+        # hang out until time to do it again
         time.sleep(SEND_FREQ * 60)
 
 
