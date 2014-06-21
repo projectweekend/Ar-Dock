@@ -12,10 +12,11 @@ CONNECTION_TYPE = os.getenv('AR_DOCK_CONNECTION_TYPE', 'usb')
 DATA_RATE = os.getenv('AR_DOCK_DATA_RATE', 9600)
 
 if CONNECTION_TYPE == 'gpio':
-    # setup GPIO serial
-    pass
+    SERIAL = Serial('/dev/ttyAMA0', DATA_RATE)
 else:
     SERIAL = Serial('/dev/ttyUSB0', DATA_RATE)
+
+# wait 2 seconds for serial port to finish initializing
 time.sleep(2)
 
 
