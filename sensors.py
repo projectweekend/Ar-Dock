@@ -20,6 +20,7 @@ def main():
     while True:
         # convert raw serial string to dictionary
         sensor_data = parse_sensor_data(SERIAL.readline())
+        print(sensor_data)
         # post data to server in another thread
         try:
             Thread(target=json_post, args=(config['data_url'], sensor_data)).start()
