@@ -14,7 +14,7 @@ def main():
     subprocess.call(["pip", "install", "virtualenv"])
 
     # Copy Upstart script
-    subprocess.call(["cp", "./install/ar-dock.conf", "/etc/init"])
+    subprocess.call(["cp", "./install/ar-dock-sensors.conf", "/etc/init"])
 
 
 if __name__ == '__main__':
