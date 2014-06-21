@@ -6,10 +6,10 @@ from utils.http import json_post
 from utils.parse import parse_sensor_data
 
 
-SEND_FREQ = os.getenv('STARBUG_SEND_FREQ', 15)
-SEND_URL = os.getenv('STARBUG_SEND_URL', 'http://holly.local/api/starbug/data')
-CONNECTION_TYPE = os.getenv('AR_DOCK_CONNECTION_TYPE', 'usb')
-DATA_RATE = os.getenv('AR_DOCK_DATA_RATE', 9600)
+SEND_FREQ = os.getenv('AR_DOCK_SENSOR_SEND_FREQ', 15)
+SEND_URL = os.getenv('AR_DOCK_SENSOR_SEND_URL', 'http://holly.local/api/starbug/data')
+CONNECTION_TYPE = os.getenv('AR_DOCK_SERIAL_CONNECTION_TYPE', 'usb')
+DATA_RATE = os.getenv('AR_DOCK_SERIAL_DATA_RATE', 9600)
 
 if CONNECTION_TYPE == 'gpio':
     SERIAL = Serial('/dev/ttyAMA0', DATA_RATE)
