@@ -1,13 +1,6 @@
 import json
 import requests
-import logging
-from datetime import datetime
-
-
-def log_post_failure(status_code, response_body):
-    entry_template = '{0}: {1} - "{2}"'
-    log_time = datetime.now()
-    logging.info(entry_template.format(log_time, status_code, response_body))
+from .log import log_post_error
 
 
 def json_post(url, data):
@@ -17,4 +10,4 @@ def json_post(url, data):
 
     response = requests.post(url, data=data, headers=headers)
     if response.status_code != requests.codes.created:
-        log_post_failure(response.status_code, response.json())
+        log_post_error(response.status_code, response.json())

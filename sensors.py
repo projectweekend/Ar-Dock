@@ -4,6 +4,7 @@ from threading import Thread
 from settings import sensors_config as config
 from utils.http import json_post
 from utils.parse import parse_sensor_data
+from utils.log import log_config_error
 
 
 if config['serial_connection'] == 'gpio':
@@ -20,7 +21,10 @@ def main():
         # convert raw serial string to dictionary
         sensor_data = parse_sensor_data(SERIAL.readline())
         # post data to server in another thread
-        Thread(target=json_post, args=(config['data_url'], sensor_data)).start()
+        try:
+            Thread(target=json_post, args=(config['data_url'], sensor_data)).start()
+        except KeyError:
+            log_config_error("'sensors: data_url' is not defined in 'config.yml'")
         # hang out until time to do it again
         time.sleep(config['data_frequency'] * 60)
 
