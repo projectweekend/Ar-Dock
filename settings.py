@@ -1,7 +1,0 @@
-import os
-
-
-CONNECTION_TYPE = os.getenv('AR_DOCK_CONNECTION_TYPE', 'usb')
-DATA_RATE = os.getenv('AR_DOCK_DATA_RATE', 9600)
-TRANSMIT_URL = os.getenv('AR_DOCK_TRANSMIT_URL', '')
-TRANSMIT_FREQ = os.getenv('AR_DOCK_TRANSMIT_URL', '')

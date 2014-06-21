@@ -1,7 +1,12 @@
+import os
 import time
 import serial
-from settings import CONNECTION_TYPE, DATA_RATE
+import thread
 
+
+SEND_FREQ = os.getenv('AR_DOCK_TRANSMIT_FREQ', 15)
+CONNECTION_TYPE = os.getenv('AR_DOCK_CONNECTION_TYPE', 'usb')
+DATA_RATE = os.getenv('AR_DOCK_DATA_RATE', 9600)
 
 if CONNECTION_TYPE == 'gpio':
     # setup GPIO serial
@@ -15,7 +20,7 @@ def main():
     while True:
         data = SERIAL.readline()
         print(data)
-        time.sleep(1)
+        time.sleep(SEND_FREQ * 60)
 
 
 if __name__ == '__main__':
