@@ -8,12 +8,14 @@ from utils.log import log_config_error
 
 
 if config['serial_connection'] == 'gpio':
+    print("Serial connection: GPIO")
     SERIAL = Serial('/dev/ttyAMA0', config['serial_rate'])
 else:
+    print("Serial connection: USB")
     SERIAL = Serial('/dev/ttyUSB0', config['serial_rate'])
 
 # wait 2 seconds for serial port to finish initializing
-time.sleep(2)
+time.sleep(5)
 
 
 def main():
