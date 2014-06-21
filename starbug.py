@@ -4,7 +4,8 @@ import serial
 import thread
 
 
-SEND_FREQ = os.getenv('AR_DOCK_TRANSMIT_FREQ', 15)
+SEND_FREQ = os.getenv('STARBUG_SEND_FREQ', 15)
+SEND_URL = os.getenv('STARBUG_SEND_URL', 'http://holly.local/api/starbug/data')
 CONNECTION_TYPE = os.getenv('AR_DOCK_CONNECTION_TYPE', 'usb')
 DATA_RATE = os.getenv('AR_DOCK_DATA_RATE', 9600)
 

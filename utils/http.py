@@ -1,11 +1,7 @@
-import os
 import json
 import requests
 import logging
 from datetime import datetime
-
-
-SEND_URL = os.getenv('SEND_URL', 'http://holly.local/api/starbug/sensor')
 
 
 def log_post_failure(status_code, response_body):
