@@ -15,7 +15,7 @@ else:
     SERIAL = Serial('/dev/ttyUSB0', config['serial_rate'])
 
 # wait 2 seconds for serial port to finish initializing
-time.sleep(5)
+time.sleep(2)
 
 
 def main():
