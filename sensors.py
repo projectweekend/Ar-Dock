@@ -22,8 +22,8 @@ def main():
 
     while True:
 
-        # send a 1 to let Ar-Starbug we want a reading
-        SERIAL.write(1)
+        # send 'R' to let Ar-Starbug know we want a sensor reading
+        SERIAL.write('R')
 
         # convert raw serial string to dictionary
         sensor_data = parse_sensor_data(SERIAL.readline())
