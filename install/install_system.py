@@ -15,6 +15,7 @@ def main():
 
     # Copy Upstart script
     subprocess.call(["cp", "./install/ar-starbug.conf", "/etc/init"])
+    subprocess.call(["cp", "./install/ar-nova-5.conf", "/etc/init"])
 
 
 if __name__ == '__main__':

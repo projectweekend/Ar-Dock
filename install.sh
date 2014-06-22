@@ -8,3 +8,4 @@ python install/install_project.py
 
 # Python requirements
 . env/bin/activate && pip install -r requirements.txt
+. env/bin/activate && sudo pip install -r requirements.txt
