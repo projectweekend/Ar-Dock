@@ -14,8 +14,8 @@ def main():
     subprocess.call(["pip", "install", "virtualenv"])
 
     # Copy Upstart script
-    subprocess.call(["cp", "./install/ar-starbug.conf", "/etc/init"])
-    subprocess.call(["cp", "./install/ar-nova-5.conf", "/etc/init"])
+    subprocess.call(["cp", "./install/environmental-sensors.conf", "/etc/init"])
+    subprocess.call(["cp", "./install/motion-detector.conf", "/etc/init"])
 
 
 if __name__ == '__main__':
