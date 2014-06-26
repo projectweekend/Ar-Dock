@@ -36,13 +36,13 @@ def main():
         gpio.wait_for_edge(MOTION_PIN, gpio.RISING)
 
         # send 'L' to let Ar-Starbug know we want a luminosity reading
-        SERIAL.write('A')
+        SERIAL.write('L')
 
         # convert raw serial string to dictionary
         sensor_data = parse_sensor_data(SERIAL.readline())
         print(sensor_data)
 
-        if sensor_data['luminosity'] > LUMINOSITY_THRESHOLD:
+        if sensor_data['luminosity'] <= LUMINOSITY_THRESHOLD:
             hue.lights_on()
             time.sleep(DETECTION_TIMEOUT)
 
