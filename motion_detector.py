@@ -40,7 +40,6 @@ def main():
 
         # convert raw serial string to dictionary
         sensor_data = parse_sensor_data(SERIAL.readline())
-        print(sensor_data)
 
         if sensor_data['luminosity'] <= LUMINOSITY_THRESHOLD:
             hue.lights_on()
