@@ -17,6 +17,6 @@ def json_post(url, data):
 
     data = json.dumps(data)
 
-    response = requests.post(url, data=data, headers=headers)
+    response = requests.post(url, data=data, headers=headers, verify=False)
     if response.status_code != requests.codes.created:
         log_post_error(response.status_code, response.json())
