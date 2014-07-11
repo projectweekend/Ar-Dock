@@ -20,22 +20,17 @@ time.sleep(2)
 
 def main():
 
-    while True:
+    # send 'A' to let Ar-Starbug know we want all sensor readings
+    SERIAL.write('A')
 
-        # send 'A' to let Ar-Starbug know we want all sensor readings
-        SERIAL.write('A')
+    # convert raw serial string to dictionary
+    sensor_data = parse_sensor_data(SERIAL.readline())
 
-        # convert raw serial string to dictionary
-        sensor_data = parse_sensor_data(SERIAL.readline())
-
-        # post data to server in another thread
-        try:
-            Thread(target=json_post, args=(config['data_url'], sensor_data)).start()
-        except KeyError:
-            log_config_error("'sensors: data_url' is not defined in 'config.yml'")
-
-        # hang out until time to do it again
-        time.sleep(config['data_frequency'] * 60)
+    # post data to server in another thread
+    try:
+        Thread(target=json_post, args=(config['data_url'], sensor_data)).start()
+    except KeyError:
+        log_config_error("'sensors: data_url' is not defined in 'config.yml'")
 
 
 if __name__ == '__main__':

@@ -1,0 +1,1 @@
+*/15 * * * * /home/pi/cron_jobs/environmental_sensors_cron.sh
