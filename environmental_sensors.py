@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import time
 from serial import Serial
 from threading import Thread
