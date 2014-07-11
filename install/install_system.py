@@ -14,8 +14,14 @@ def main():
     subprocess.call(["pip", "install", "virtualenv"])
 
     # Copy Upstart script
-    subprocess.call(["cp", "./install/environmental-sensors.conf", "/etc/init"])
     subprocess.call(["cp", "./install/motion-detector.conf", "/etc/init"])
+
+    # TODO: This needs to set the cron job using the crontab.txt file
+
+    # Copy Cron job script
+    subprocess.call(["mkdir", "/home/pi/cron_jobs"])
+    subprocess.call(["cp", "./install/environmental_sensors_cron.sh", "/home/pi/cron_jobs"])
+
 
 
 if __name__ == '__main__':
