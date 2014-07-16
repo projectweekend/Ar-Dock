@@ -3,3 +3,4 @@ sensors:
     serial_rate: 9600
     data_frequency: 15
     sensor_data_url: https://holly.projectweekend.net/api/sensor
+    system_data_url: https://holly.projectweekend.net/api/raspberry-pi
