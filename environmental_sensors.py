@@ -30,9 +30,9 @@ def main():
 
     # post data to server in another thread
     try:
-        Thread(target=json_post, args=(config['data_url'], sensor_data)).start()
+        Thread(target=json_post, args=(config['sensor_data_url'], sensor_data)).start()
     except KeyError:
-        log_config_error("'sensors: data_url' is not defined in 'config.yml'")
+        log_config_error("'sensor_data_url' is not defined in 'config.yml'")
 
 
 if __name__ == '__main__':
