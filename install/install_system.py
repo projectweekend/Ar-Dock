@@ -19,6 +19,7 @@ def main():
     # Copy cron job script and set crontab
     subprocess.call(["mkdir", "/home/pi/cron_jobs"])
     subprocess.call(["cp", "./install/environmental_sensors_cron.sh", "/home/pi/cron_jobs"])
+    subprocess.call(["cp", "./install/system_temperature_cron.sh", "/home/pi/cron_jobs"])
     subprocess.call(["crontab", "./install/crontab.txt"])
 
 
