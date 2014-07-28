@@ -19,8 +19,8 @@ def get_system_temp():
     temp_c = float(system_result.split("=")[1].split("'")[0])
     temp_f = (temp_c * (9.0/5.0)) + 32
     return {
-        'temp_c': temp_c,
-        'temp_f': temp_f
+        'temp_c': round(temp_c, 2),
+        'temp_f': round(temp_f, 2)
     }
 
 
