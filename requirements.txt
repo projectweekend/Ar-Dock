@@ -3,4 +3,8 @@ pyserial==2.7
 requests==2.3.0
 RPi.GPIO==0.5.5
 hammock==0.2.4
+oauthlib==0.6.3
+python-twitter==2.0
+requests-oauthlib==0.4.1
+simplejson==3.6.0
 wsgiref==0.1.2
