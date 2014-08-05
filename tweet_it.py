@@ -29,6 +29,7 @@ def twitter_client():
                         access_token_key=TWITTER_ACCESS_TOKEN_KEY,
                         access_token_secret=TWITTER_ACCESS_TOKEN_SECRET)
 
+
 def current_datetime():
     dt = datetime.datetime.now()
     return dt.strftime("%m/%d/%Y - %H:%M")
