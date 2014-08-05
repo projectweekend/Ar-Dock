@@ -7,6 +7,7 @@ from settings import sensors_config as config
 from utils.http import json_post
 from utils.parse import parse_sensor_data
 from utils.log import log_config_error
+from tweet_it import tweet_it
 
 
 if config['serial_connection'] == 'gpio':
@@ -33,6 +34,9 @@ def main():
         Thread(target=json_post, args=(config['sensor_data_url'], sensor_data)).start()
     except KeyError:
         log_config_error("'sensor_data_url' is not defined in 'config.yml'")
+
+    # post to twitter in another thread
+    Thread(target=tweet_it, args=(sensor_data,)).start()
 
 
 if __name__ == '__main__':

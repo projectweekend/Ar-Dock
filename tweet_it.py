@@ -1,4 +1,4 @@
-aimport os
+import os
 import datetime
 import twitter
 
@@ -9,10 +9,11 @@ TWITTER_ACCESS_TOKEN_KEY = os.getenv('TWITTER_ACCESS_TOKEN_KEY', '')
 TWITTER_ACCESS_TOKEN_SECRET = os.getenv('TWITTER_ACCESS_TOKEN_SECRET', '')
 
 
-def main():
-    tc = twitter_client()
-
-    sensor_data = read_all_sensors()
+def tweet_it(sensor_data):
+    tc = twitter.Api(consumer_key=TWITTER_CONSUMER_KEY,
+                        consumer_secret=TWITTER_CONSUMER_SECRET,
+                        access_token_key=TWITTER_ACCESS_TOKEN_KEY,
+                        access_token_secret=TWITTER_ACCESS_TOKEN_SECRET)
 
     temperature_message = temperature_status_message(sensor_data)
     if temperature_message:
@@ -23,21 +24,9 @@ def main():
         tc.PostUpdate(humidity_message)
 
 
-def twitter_client():
-    return twitter.Api(consumer_key=TWITTER_CONSUMER_KEY,
-                        consumer_secret=TWITTER_CONSUMER_SECRET,
-                        access_token_key=TWITTER_ACCESS_TOKEN_KEY,
-                        access_token_secret=TWITTER_ACCESS_TOKEN_SECRET)
-
-
 def current_datetime():
     dt = datetime.datetime.now()
     return dt.strftime("%m/%d/%Y - %H:%M")
-
-
-def read_all_sensors():
-    # TODO: make this get temperature reading
-    return None
 
 
 def temperature_status_message(sensor_data):
@@ -59,7 +48,3 @@ def humidity_status_message(sensor_data):
         # TODO: send an email to me
         return
     return message_template.format(humidity, current_datetime())
-
-
-if __name__ == '__main__':
-    main()
