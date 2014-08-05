@@ -1,4 +1,4 @@
-import os
+aimport os
 import datetime
 import twitter
 
@@ -11,10 +11,16 @@ TWITTER_ACCESS_TOKEN_SECRET = os.getenv('TWITTER_ACCESS_TOKEN_SECRET', '')
 
 def main():
     tc = twitter_client()
+
     sensor_data = read_all_sensors()
-    message = temperature_status_message(sensor_data)
-    if message:
-        tc.PostUpdate(message)
+
+    temperature_message = temperature_status_message(sensor_data)
+    if temperature_message:
+        tc.PostUpdate(temperature_message)
+
+    humidity_message = humidity_status_message(sensor_data)
+    if humidity_message:
+        tc.PostUpdate(humidity_message)
 
 
 def twitter_client():
@@ -42,6 +48,16 @@ def temperature_status_message(sensor_data):
         # TODO: send an email to me
         return
     return message_template.format(fahrenheit, celsius, current_datetime())
+
+
+def humidity_status_message(sensor_data):
+    message_template = "The current indoor humidity is: {0}% ({1}) #raspberrypi"
+    try:
+        humidity = round(sensor_data['humidity'], 2)
+    except KeyError:
+        # TODO: send an email to me
+        return
+    return message_template.format(humidity, current_datetime())
 
 
 if __name__ == '__main__':
