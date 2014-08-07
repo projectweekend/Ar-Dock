@@ -32,8 +32,8 @@ def current_datetime():
 def temperature_status_message(sensor_data):
     message_template = "The current indoor temperature is: {0} F/{1} C ({2}) #raspberrypi"
     try:
-        celsius = round(sensor_data['celsius'], 2)
-        fahrenheit = round(sensor_data['fahrenheit'], 2)
+        celsius = round(sensor_data['temp_c'], 2)
+        fahrenheit = round(sensor_data['temp_f'], 2)
     except KeyError:
         # TODO: send an email to me
         return
