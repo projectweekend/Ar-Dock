@@ -13,7 +13,7 @@ This is a Raspberry Pi project that works directly with one of my Arduino projec
 
 ## Config
 
-Custom configurations are stored in an untracked file at the root of the project: `config.yml`. The following is an example file:
+Custom configurations are stored in an untracked file at the root of the project: `config.yml`. The following is an example of what that file should look like:
 ```
 sensors:
     serial_connection: gpio
@@ -25,4 +25,9 @@ bean:
     mac_address: mac_address_for_bean
     characteristic_uuid: characteristic_bank_uuid_value
 ```
+
+
+## BlueZ
+
+This project requires the BlueZ Bluetooth stack and the BluePy Python library. The easiest way to install both of those is to use the Raspberry Pi setup script I made: [http://projectweekend.github.io/Pi-Setup/](http://projectweekend.github.io/Pi-Setup/)
 
