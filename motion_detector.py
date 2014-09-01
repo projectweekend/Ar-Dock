@@ -2,6 +2,7 @@ import time
 from serial import Serial
 from btle import Peripheral
 from settings import sensors_config as config
+from settings import bean_config
 from lighting import Bridge
 from utils.parse import parse_sensor_data
 
@@ -46,8 +47,8 @@ def main():
 
 
 def read_motion_detector():
-    p = Peripheral("D0:39:72:C8:C9:6B")
-    characteristics = p.getCharacteristics(uuid="A495FF21-C5B1-4B44-B512-1370F02D74DE")
+    p = Peripheral(bean_config['mac_address'])
+    characteristics = p.getCharacteristics(uuid=bean_config['characteristic_uuid'])
     if len(characteristics) != 1:
         # no data from Bean...send some kind of message
         return None
