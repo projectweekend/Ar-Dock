@@ -1,6 +1,6 @@
 import time
-import RPi.GPIO as gpio
 from serial import Serial
+from btle import Peripheral
 from settings import sensors_config as config
 from lighting import Bridge
 from utils.parse import parse_sensor_data
@@ -17,14 +17,9 @@ else:
 # wait 2 seconds for serial port to finish initializing
 time.sleep(2)
 
-
-# setup motion detector stuff
-DETECTION_TIMEOUT = 180
-MOTION_PIN = 18
 LUMINOSITY_THRESHOLD = 2.0
-
-gpio.setmode(gpio.BCM)
-gpio.setup(MOTION_PIN, gpio.IN, initial=gpio.LOW, pull_up_down=gpio.PUD_DOWN)
+READ_INTERVAL = 3
+DETECTION_TIMEOUT = 7200
 
 
 def main():
@@ -33,17 +28,32 @@ def main():
 
     while True:
 
-        gpio.wait_for_edge(MOTION_PIN, gpio.RISING)
+        detector_value = read_motion_detector()
 
-        # send 'L' to let Ar-Starbug know we want a luminosity reading
-        SERIAL.write('L')
+        if detector_value == 1:
 
-        # convert raw serial string to dictionary
-        sensor_data = parse_sensor_data(SERIAL.readline())
+            # send 'L' to let Ar-Starbug know we want a luminosity reading
+            SERIAL.write('L')
 
-        if sensor_data['luminosity'] <= LUMINOSITY_THRESHOLD:
-            hue.lights_on()
-            time.sleep(DETECTION_TIMEOUT)
+            # convert raw serial string to dictionary
+            sensor_data = parse_sensor_data(SERIAL.readline())
+
+            if sensor_data['luminosity'] <= LUMINOSITY_THRESHOLD:
+                hue.lights_on()
+                time.sleep(DETECTION_TIMEOUT)
+
+            time.sleep(READ_INTERVAL)
+
+
+def read_motion_detector():
+    p = Peripheral("D0:39:72:C8:C9:6B")
+    characteristics = p.getCharacteristics(uuid="A495FF21-C5B1-4B44-B512-1370F02D74DE")
+    if len(characteristics) != 1:
+        # no data from Bean...send some kind of message
+        return None
+    value = characteristics[0].read()
+    p.disconnect()
+    return value
 
 
 if __name__ == '__main__':
