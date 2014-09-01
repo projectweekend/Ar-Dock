@@ -1,6 +1,6 @@
 import time
 from serial import Serial
-from btle import Peripheral
+from btle import Peripheral, BTLEException
 from settings import sensors_config as config
 from settings import bean_config
 from lighting import Bridge
@@ -47,14 +47,19 @@ def main():
 
 
 def read_motion_detector():
-    p = Peripheral(bean_config['mac_address'])
-    characteristics = p.getCharacteristics(uuid=bean_config['characteristic_uuid'])
-    if len(characteristics) != 1:
-        # no data from Bean...send some kind of message
-        return None
-    value = characteristics[0].read()
-    p.disconnect()
-    return value
+    try:
+        p = Peripheral(bean_config['mac_address'])
+    except BTLEException:
+        # no bean found, print to log for now
+        print("Unable to connect to Bean")
+    else:
+        characteristics = p.getCharacteristics(uuid=bean_config['characteristic_uuid'])
+        if len(characteristics) != 1:
+            # no data from Bean...send some kind of message
+            return None
+        value = characteristics[0].read()
+        p.disconnect()
+        return value
 
 
 if __name__ == '__main__':
