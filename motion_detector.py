@@ -43,7 +43,7 @@ def main():
                 hue.lights_on()
                 time.sleep(DETECTION_TIMEOUT)
 
-            time.sleep(READ_INTERVAL)
+        time.sleep(READ_INTERVAL)
 
 
 def read_motion_detector():
