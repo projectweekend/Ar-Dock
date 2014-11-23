@@ -56,3 +56,4 @@ docs/_build/
 *.sublime-project
 *.sublime-workspace
 config.yml
+node_modules
