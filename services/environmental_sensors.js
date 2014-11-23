@@ -8,7 +8,7 @@ var serialMessage = process.env.SERIAL_MESSAGE;
 var rabbitURL = process.env.RABBIT_URL;
 
 
-var broker = jackrabbit( RABBIT_URL, 1 );
+var broker = jackrabbit( rabbitURL, 1 );
 var serialPort = new serialport.SerialPort( serialAddress, {
     baudrate: serialRate,
     parser: serialport.parsers.readline( "\n" )
