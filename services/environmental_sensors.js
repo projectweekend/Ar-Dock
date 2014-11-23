@@ -28,7 +28,7 @@ var brokerOnReady = function () {
         serialPort.on( "data", function ( data ) {
             ack( data );
         } );
-        serialPort.write( "A", function ( err, data ) {
+        serialPort.write( serialMessage, function ( err, data ) {
             if ( err ) {
                 console.log( "Error writing to serial port: " + err );
             }
