@@ -4,7 +4,6 @@ var serialport = require( "serialport" );
 
 var serialAddress = process.env.SERIAL_ADDRESS;
 var serialRate = process.env.SERIAL_RATE;
-var serialMessage = process.env.SERIAL_MESSAGE;
 var rabbitURL = process.env.RABBIT_URL;
 
 
@@ -28,7 +27,7 @@ var brokerOnReady = function () {
         serialPort.on( "data", function ( data ) {
             ack( data );
         } );
-        serialPort.write( serialMessage, function ( err, data ) {
+        serialPort.write( message.serialMessage, function ( err, data ) {
             if ( err ) {
                 console.log( "Error writing to serial port: " + err );
             }
