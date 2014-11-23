@@ -13,19 +13,19 @@ var serialPort = new serialport.SerialPort( serialAddress, {
     parser: serialport.parsers.readline( "\n" )
 } );
 
-var parseSensorData = function ( sensorData ) {
+var serialDataToJSON = function ( sensorData ) {
     var output = {};
     sensorData.split( "|" ).map( function ( sensorReading ) {
         var parts = sensorReading.split( ":" );
         output[ parts[ 0 ] ] = parseFloat( parts[ 1 ] );
     } );
-    return output;
+    return JSON.stringify( output );
 };
 
 var brokerOnReady = function () {
     broker.handle( "sensor.get", function ( message, ack ) {
         serialPort.on( "data", function ( data ) {
-            ack( data );
+            ack( serialDataToJSON( data ) );
         } );
         serialPort.write( message.serialMessage, function ( err, data ) {
             if ( err ) {
