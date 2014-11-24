@@ -33,6 +33,7 @@ var serialDataToJSON = function ( sensorData ) {
 };
 
 var brokerOnReady = function ( err, queue, info ) {
+    logger.log( "Broker ready" );
     if ( err ) {
         logger.log( "Error with 'brokerOnReady': " + err );
         process.exit( 1 );
@@ -51,11 +52,13 @@ var brokerOnReady = function ( err, queue, info ) {
 };
 
 var brokerOnConnect = function () {
+    logger.log( "Broker connected" );
     broker.create( "sensor.get", { prefetch: 5 }, brokerOnReady );
 };
 
 // Kick it off when serial port is open
 serialPort.on( "open", function () {
+    logger.log( "Serial port open" );
     broker.on( "connected", brokerOnConnect );
 } );
 
