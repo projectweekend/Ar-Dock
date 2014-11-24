@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "jackrabbit": "^3.0.8",
+    "loggly": "^1.0.7",
     "serialport": "^1.4.6"
   },
   "devDependencies": {}
