@@ -1,27 +1,9 @@
-var jackrabbit = require( "jackrabbit" );
-var serialport = require( "serialport" );
-var loggly = require( "loggly" );
+var utils = require( "./utils" );
 
 
-var logglyToken = process.env.LOGGLY_TOKEN;
-var logglySubdomain = process.env.LOGGLY_SUBDOMAIN;
-var serialAddress = process.env.SERIAL_ADDRESS;
-var serialRate = process.env.SERIAL_RATE;
-var rabbitURL = process.env.RABBIT_URL;
-
-
-var broker = jackrabbit( rabbitURL, 1 );
-
-var serialPort = new serialport.SerialPort( serialAddress, {
-    baudrate: serialRate,
-    parser: serialport.parsers.readline( "\n" )
-} );
-
-var logger = loggly.createClient( {
-    token: logglyToken,
-    subdomain: logglySubdomain,
-    tags: [ "environmental-sensor-service" ]
-} );
+var broker = utils.jackrabbit();
+var serialPort = utils.serialport();
+var logger = utils.logger( [ "environmental-sensor-service" ] );
 
 var serialDataToJSON = function ( sensorData ) {
     var output = {};
