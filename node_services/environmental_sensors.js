@@ -1,8 +1,10 @@
 var jackrabbit = require( "jackrabbit" );
 var serialport = require( "serialport" );
-var syslog = require( "syslog" );
+var loggly = require( "loggly" );
 
 
+var logglyToken = process.env.LOGGLY_TOKEN;
+var logglySubdomain = process.env.LOGGLY_SUBDOMAIN;
 var serialAddress = process.env.SERIAL_ADDRESS;
 var serialRate = process.env.SERIAL_RATE;
 var rabbitURL = process.env.RABBIT_URL;
@@ -15,7 +17,11 @@ var serialPort = new serialport.SerialPort( serialAddress, {
     parser: serialport.parsers.readline( "\n" )
 } );
 
-var logger = syslog.createClient( 514, "localhost" );
+var logger = loggly.createClient( {
+    token: logglyToken,
+    subdomain: logglySubdomain,
+    tags: [ "environmental-sensor-service" ]
+} );
 
 var serialDataToJSON = function ( sensorData ) {
     var output = {};
@@ -27,9 +33,9 @@ var serialDataToJSON = function ( sensorData ) {
 };
 
 var brokerOnReady = function ( err, queue, info ) {
-    logger.info( "Env-Sensor | Broker ready" );
+    logger.log( "Broker ready" );
     if ( err ) {
-        logger.error( "Env-Sensor | Error with 'brokerOnReady': " + err );
+        logger.log( "Error with 'brokerOnReady': " + err );
         process.exit( 1 );
     }
     broker.handle( "sensor.get", function ( message, ack ) {
@@ -38,7 +44,7 @@ var brokerOnReady = function ( err, queue, info ) {
         } );
         serialPort.write( message.serialMessage, function ( err, data ) {
             if ( err ) {
-                logger.error( "Env-Sensor | Error with 'serialPort.write': " + err );
+                logger.log( "Error with 'serialPort.write': " + err );
                 process.exit( 1 );
             }
         } );
@@ -46,22 +52,22 @@ var brokerOnReady = function ( err, queue, info ) {
 };
 
 var brokerOnConnect = function () {
-    logger.info( "Env-Sensor | Broker connected" );
+    logger.log( "Broker connected" );
     broker.create( "sensor.get", { prefetch: 5 }, brokerOnReady );
 };
 
 // Kick it off when serial port is open
 serialPort.on( "open", function () {
-    logger.info( "Env-Sensor | Serial port open" );
+    logger.log( "Serial port open" );
     broker.on( "connected", brokerOnConnect );
 } );
 
 serialPort.on( "error", function ( err ) {
-    logger.error( "Env-Sensor | Error event 'serialPort': " + err );
+    logger.log( "Error event 'serialPort': " + err );
     process.exit( 1 );
 } );
 
 broker.on( "disconnected", function () {
-    logger.error( "Env-Sensor | Error 'broker' disconnected" );
+    logger.log( "Error 'broker' disconnected" );
     process.exit( 1 );
 } );
