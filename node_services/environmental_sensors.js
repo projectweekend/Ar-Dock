@@ -6,7 +6,9 @@ var serialPort = utils.serialport();
 var logger = utils.logger( [ "environmental-sensor-service" ] );
 
 var serialDataToJSON = function ( sensorData ) {
-    var output = {};
+    var output = {
+        date: new Date()
+    };
     sensorData.split( "|" ).map( function ( sensorReading ) {
         var parts = sensorReading.split( ":" );
         output[ parts[ 0 ] ] = parseFloat( parts[ 1 ] );
