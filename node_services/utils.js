@@ -10,12 +10,12 @@ var serialRate = process.env.SERIAL_RATE;
 var rabbitURL = process.env.RABBIT_URL;
 
 
-var jackrabbit = function () {
+exports.jackrabbit = function () {
     return jr( rabbitURL, 1 );
 };
 
 
-var logger = function ( tags ) {
+exports.logger = function ( tags ) {
     return loggly.createClient( {
         token: logglyToken,
         subdomain: logglySubdomain,
@@ -24,7 +24,7 @@ var logger = function ( tags ) {
 };
 
 
-var buildSerialPort = function () {
+exports.serialport = function () {
     return new sp.SerialPort( serialAddress, {
         baudrate: serialRate,
         parser: sp.parsers.readline( "\n" )
