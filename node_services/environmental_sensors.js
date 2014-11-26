@@ -35,7 +35,7 @@ var run = function () {
     };
 
     process.once( "uncaughtException", function ( err ) {
-        logger.log( "Killing environmental-sensor-service" );
+        logger.log( "Stopping environmental-sensor-service" );
         logger.log( err );
         process.exit();
     } );
