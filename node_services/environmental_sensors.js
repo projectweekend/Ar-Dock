@@ -12,7 +12,7 @@ var run = function () {
     var serialPort = connections.serialport();
     var broker = connections.jackrabbit();
 
-    var messageHandler = function ( message, ack ) {
+    var handleMessage = function ( message, ack ) {
         serialPort.on( "data", function ( data ) {
             ack( JSON.stringify( utils.parseSerialData( data ) ) );
         } );
@@ -24,14 +24,14 @@ var run = function () {
         } );
     };
 
-    var brokerHandle = function () {
+    var serve = function () {
         logger.log( "Broker ready" );
-        broker.handle( "sensor.get", messageHandler );
+        broker.handle( "sensor.get", handleMessage );
     };
 
-    var brokerCreate = function () {
+    var create = function () {
         logger.log( "Broker connected" );
-        broker.create( "sensor.get", { prefetch: 5 }, brokerHandle );
+        broker.create( "sensor.get", { prefetch: 5 }, serve );
     };
 
     process.once( "uncaughtException", function ( err ) {
@@ -42,7 +42,7 @@ var run = function () {
 
     serialPort.on( "open", function () {
         logger.log( "Serial port open" );
-        broker.once( "connected", brokerCreate );
+        broker.once( "connected", create );
     } );
 };
 
