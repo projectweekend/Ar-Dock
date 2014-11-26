@@ -1,57 +1,53 @@
-var utils = require( "./utils" );
+var os = require( "os" );
+var throng = require( "throng" );
+var connections = require( "./shared/connections" );
+var utils = require( "./shared/utils" );
 
 
-var broker = utils.jackrabbit();
-var serialPort = utils.serialport();
-var logger = utils.logger( [ "environmental-sensor-service" ] );
+var logger = connections.logger( [ "environmental-sensor-service" ] );
 
-var serialDataToJSON = function ( sensorData ) {
-    var output = {
-        date: new Date()
-    };
-    sensorData.split( "|" ).map( function ( sensorReading ) {
-        var parts = sensorReading.split( ":" );
-        output[ parts[ 0 ] ] = parseFloat( parts[ 1 ] );
-    } );
-    return JSON.stringify( output );
-};
+var run = function () {
+    logger.log( "Starting environmental-sensor-service" );
 
-var brokerOnReady = function ( err, queue, info ) {
-    logger.log( "Broker ready" );
-    if ( err ) {
-        logger.log( "Error with 'brokerOnReady': " + err );
-        process.exit( 1 );
-    }
-    broker.handle( "sensor.get", function ( message, ack ) {
+    var serialPort = connections.serialport();
+    var broker = connections.jackrabbit();
+
+    var brokerHandleMessage = function ( message, ack ) {
         serialPort.on( "data", function ( data ) {
-            ack( serialDataToJSON( data ) );
+            ack( JSON.stringify( utils.parseSerialData( data ) ) );
         } );
         serialPort.write( message.serialMessage, function ( err, data ) {
             if ( err ) {
                 logger.log( "Error with 'serialPort.write': " + err );
-                process.exit( 1 );
+                process.exit();
             }
         } );
+    };
+
+    var brokerOnReady = function () {
+        logger.log( "Broker ready" );
+        broker.handle( "sensor.get", brokerHandleMessage );
+    };
+
+    var brokerOnConnect = function () {
+        logger.log( "Broker connected" );
+        broker.create( "sensor.get", { prefetch: 5 }, brokerOnReady );
+    };
+
+    process.once( "uncaughtException", function ( err ) {
+        logger.log( "Killing environmental-sensor-service" );
+        logger.log( err );
+        process.exit();
+    } );
+
+    serialPort.on( "open", function () {
+        logger.log( "Serial port open" );
+        broker.once( "connected", brokerOnConnect );
     } );
 };
 
-var brokerOnConnect = function () {
-    logger.log( "Broker connected" );
-    broker.create( "sensor.get", { prefetch: 5 }, brokerOnReady );
-};
 
-// Kick it off when serial port is open
-serialPort.on( "open", function () {
-    logger.log( "Serial port open" );
-    broker.on( "connected", brokerOnConnect );
-} );
-
-serialPort.on( "error", function ( err ) {
-    logger.log( "Error event 'serialPort': " + err );
-    process.exit( 1 );
-} );
-
-broker.on( "disconnected", function () {
-    logger.log( "Error 'broker' disconnected" );
-    process.exit( 1 );
+throng( run, {
+    workers: os.cpus().length,
+    lifetime: Infinity
 } );
